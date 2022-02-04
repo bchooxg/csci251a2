@@ -103,6 +103,21 @@ public:
             this->xVertices[i] = x_ord;
             this->yVertices[i] = y_ord;
         }
+
+        // Populates perimeter points and shape points
+        for(int i = yMin; i < yMax; i++){
+            for(int j = xMin; j < xMax; j++){
+                if(isPointAVertex(j,i)){
+                    continue;
+                }else if(isPointOnShape(j,i)){
+                    xPerimeterPoints.push_back(j);
+                    yPerimeterPoints.push_back(i);
+                }else if(isPointInShape(j,i)){
+                    xShapePoints.push_back(j);
+                    yShapePoints.push_back(i);
+                }
+            }
+        }
     }
 
     string toString() override {
@@ -111,8 +126,11 @@ public:
         ss << "Shape [" << to_string(id) << "]" << endl;
         ss << "Name   : " << name << endl;
         ss << "Special Type : " << (containsWarpSpace ? "WS" : "NS") << endl;
-        ss << "Area : " << area << " units sqaure" << endl;
-        ss << "Vertices : "<< endl;
+        if(area > 0){
+            ss << "Area : " << area << " units sqaure" << endl;
+        }else{
+            ss << "Area : " <<  "Not Computed yet" << endl;
+        }        ss << "Vertices : "<< endl;
 
         for(int i = 0; i < CROSSVERTICES; i++){
             ss << "Point [" << i << "] : (" << xVertices[i] << ", "<< yVertices[i] <<")" << endl;
@@ -140,22 +158,6 @@ public:
     }
 
     double computeArea() override {
-        // Populates the Perimeter points and the
-
-        for(int i = yMin; i < yMax; i++){
-            for(int j = xMin; j < xMax; j++){
-                if(isPointAVertex(j,i)){
-                    continue;
-                }else if(isPointOnShape(j,i)){
-                    xPerimeterPoints.push_back(j);
-                    yPerimeterPoints.push_back(i);
-                }else if(isPointInShape(j,i)){
-                    xShapePoints.push_back(j);
-                    yShapePoints.push_back(i);
-                }
-            }
-        }
-
         // Using shoelace formula in order to determine the area of any polygon
 
         // Initialize area
@@ -170,7 +172,10 @@ public:
         }
 
         // Return absolute value
-        return abs(area / 2.0);
+        area = abs(area / 2.0);
+        this->area = area;
+
+        return area;
     }
 
 private: int pnpoly(int nvert, int *vertx, int *verty, int testx, int testy){
@@ -337,6 +342,21 @@ public:
             this->xVertices[i] = x_ord;
             this->yVertices[i] = y_ord;
         }
+
+        // Populating points that lie on perimeter & shape
+        for(int i = yMin ; i <= yMax; i++){
+            for(int j = xMin ; j <= xMax; j++){
+
+                if( isPointOnShape(j, i) ){
+                    xPerimeterPoints.push_back(j);
+                    yPerimeterPoints.push_back(i);
+                }else if(isPointInShape(j,i)){
+                    xShapePoints.push_back(j);
+                    yShapePoints.push_back(i);
+                }
+
+            }
+        }
     }
 
     bool isPointInShape(int x, int y) override {
@@ -373,7 +393,11 @@ public:
         ss << "Shape [" << to_string(id) << "]" << endl;
         ss << "Name   : " << name << endl;
         ss << "Special Type : " << (containsWarpSpace ? "WS" : "NS") << endl;
-        ss << "Area : " << area << " units sqaure" << endl;
+        if(area > 0){
+            ss << "Area : " << area << " units sqaure" << endl;
+        }else{
+            ss << "Area : " <<  "Not Computed yet" << endl;
+        }
         ss << "Vertices : "<< endl;
 
         for(int i = 0; i < SQUAREVERTICES; i++){
@@ -403,24 +427,6 @@ public:
 
     double computeArea() override {
 
-        // Bottom left vertex
-        int x = xMin;
-        int y = yMin;
-
-        // Populating points that lie on perimeter & shape
-        for(int i = yMin ; i <= yMax; i++){
-            for(int j = xMin ; j <= xMax; j++){
-
-                if( isPointOnShape(j, i) ){
-                    xPerimeterPoints.push_back(j);
-                    yPerimeterPoints.push_back(i);
-                }else if(isPointInShape(j,i)){
-                    xShapePoints.push_back(j);
-                    yShapePoints.push_back(i);
-                }
-
-            }
-        }
 
         // Populating area
         this->width = xMax - xMin;
@@ -479,31 +485,9 @@ public:
             this->xVertices[i] = x_ord;
             this->yVertices[i] = y_ord;
         }
-    }
 
-    bool isPointInShape(int x, int y) override {
-        // Uses pythagoras theorem to find distance from the center
-        // a^2  + b^2 = c^2
-        double result = sqrt( pow((x - xVertices[0]),2.0) + pow((y - yVertices[0]),2.0 ) )  ;
-        cout << "IS POINT IN SHAPE ? " << endl;
-        cout << "X : " << x << ", Y : " << y << endl;
-        cout << "Radius : " << radius << endl;
-        cout << "Result : " << result << endl;
-        cout << "T OR F : " << ((result < radius)?"T": "F") << endl;
-        return result < radius;
-    }
-
-    bool isPointOnShape(int x, int y) override {
-        double result = sqrt( pow((x - xVertices[0]),2.0) + pow((y - yVertices[0]),2.0 ) )  ;
-        cout << "IS POINT ON SHAPE ? " << endl;
-        cout << "X : " << x << ", Y : " << y << endl;
-        cout << "Radius : " << radius << endl;
-        cout << "Result : " << result << endl;
-        cout << "T OR F : " << ((result == radius)?"T": "F") << endl;
-        return result == radius;
-    }
-
-    double computeArea() override {
+        // To get points within the circle
+        // Creates a square surrounding the circle and checks each point if its in the circle.
 
         // To compute the points of the circle
         xMin = xVertices[0] - radius;
@@ -512,20 +496,6 @@ public:
         xMax = xVertices[0] + radius;
         yMax = yVertices[0] + radius;
 
-//        // To get the points on the perimeter [ North south east west ]
-//        const int m = 4;
-//        int radiusToInt = int(radius);
-//        int xMovements[m] ={0,0,radiusToInt,-radiusToInt};
-//        int yMovements[m] ={radiusToInt,-radiusToInt,0,0};
-//
-//        for(int i = 0; i < m; i++){
-//            xPerimeterPoints.push_back(xVertices[0] + xMovements[i]);
-//            yPerimeterPoints.push_back(yVertices[0] + yMovements[i]);
-//        }
-
-
-        // To get points within the circle
-        // Creates a square surrounding the circle and checks each point if its in the circle.
         for(int i = yMin; i <= yMax; i++){
             for(int j = xMin; j <= xMax;j++){
 
@@ -546,6 +516,21 @@ public:
 
             }
         }
+    }
+
+    bool isPointInShape(int x, int y) override {
+        // Uses pythagoras theorem to find distance from the center
+        // a^2  + b^2 = c^2
+        double result = sqrt( pow((x - xVertices[0]),2.0) + pow((y - yVertices[0]),2.0 ) )  ;
+        return result < radius;
+    }
+
+    bool isPointOnShape(int x, int y) override {
+        double result = sqrt( pow((x - xVertices[0]),2.0) + pow((y - yVertices[0]),2.0 ) )  ;
+        return result == radius;
+    }
+
+    double computeArea() override {
 
         // To compute the area of the circle and store it in
         double area = PI * radius * radius;
@@ -559,7 +544,11 @@ public:
         ss << "Shape [" << to_string(id) << "]" << endl;
         ss << "Name   : " << name << endl;
         ss << "Special Type : " << (containsWarpSpace ? "WS" : "NS") << endl;
-        ss << "Area : " << area << " units sqaure" << endl;
+        if(area > 0){
+            ss << "Area : " << area << " units sqaure" << endl;
+        }else{
+            ss << "Area : " <<  "Not Computed yet" << endl;
+        }
         ss << "Vertices : "<< endl;
 
         for(int i = 0; i < CIRCLEVERTICES; i++){
@@ -654,6 +643,21 @@ public:
             this->xVertices[i] = x_ord;
             this->yVertices[i] = y_ord;
         }
+
+        // Populating points that lie on perimeter & shape
+        for(int i = yMin ; i <= yMax; i++){
+            for(int j = xMin ; j <= xMax; j++){
+
+                if( isPointOnShape(j, i) ){
+                    xPerimeterPoints.push_back(j);
+                    yPerimeterPoints.push_back(i);
+                }else if(isPointInShape(j,i)){
+                    xShapePoints.push_back(j);
+                    yShapePoints.push_back(i);
+                }
+
+            }
+        }
     }
 
     bool isPointInShape(int x, int y) override {
@@ -690,13 +694,16 @@ public:
         ss << "Shape [" << to_string(id) << "]" << endl;
         ss << "Name   : " << name << endl;
         ss << "Special Type : " << (containsWarpSpace ? "WS" : "NS") << endl;
-        ss << "Area : " << area << " units sqaure" << endl;
+        if(area > 0){
+            ss << "Area : " << area << " units sqaure" << endl;
+        }else{
+            ss << "Area : " <<  "Not Computed yet" << endl;
+        }
         ss << "Vertices : "<< endl;
 
         for(int i = 0; i < RECTANGLEVERTICES; i++){
             ss << "Point [" << i << "] : (" << xVertices[i] << ", "<< yVertices[i] <<")" << endl;
         }
-
         ss << "Points on perimeter : ";
         if(xPerimeterPoints.size() == 0){ ss << "none!";}
         for(int i = 0; i < xPerimeterPoints.size(); i++){
@@ -719,25 +726,6 @@ public:
     }
 
     double computeArea() override {
-
-        // Bottom left vertex
-        int x = xMin;
-        int y = yMin;
-
-        // Populating points that lie on perimeter & shape
-        for(int i = yMin ; i <= yMax; i++){
-            for(int j = xMin ; j <= xMax; j++){
-
-                if( isPointOnShape(j, i) ){
-                    xPerimeterPoints.push_back(j);
-                    yPerimeterPoints.push_back(i);
-                }else if(isPointInShape(j,i)){
-                    xShapePoints.push_back(j);
-                    yShapePoints.push_back(i);
-                }
-
-            }
-        }
 
         // Populating area
         this->width = xMax - xMin;
@@ -876,10 +864,10 @@ void computeShapes(vector<ShapeTwoD*> &v){
     cout << "Computation Completed! ( " <<  v.size() << " records were updated )" << endl;
 }
 
+
 int main() {
     vector<ShapeTwoD* > allShapes;
     bool running = true;
-    bool computed = false;
     int shapesCount = 0;
 
     while(running){
@@ -887,18 +875,12 @@ int main() {
         switch (choice) {
             case 1:
                 getShapeInput(allShapes, shapesCount);
-                computed = false;
                 break;
             case 2:
                 computeShapes(allShapes);
-                computed = true;
                 break;
             case 3:
-                if(computed){
-                    printShapesReport(allShapes);
-                }else{
-                    cout << "Please compute area before generating report" << endl ;
-                }
+                printShapesReport(allShapes);
                 break;
             case 4:
                 break;
