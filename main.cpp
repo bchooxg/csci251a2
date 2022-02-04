@@ -1,6 +1,5 @@
 #include <iostream>
 #include <iomanip>
-#include <numbers>
 #include <vector>
 #include <sstream>
 #include <cmath>
@@ -12,7 +11,7 @@ class ShapeTwoD{
 protected:
     string name;
     bool containsWarpSpace;
-    int counter = 0;
+
 public:
     // Public Constructors
     ShapeTwoD(string name, bool containsWarpSpace){
@@ -864,6 +863,34 @@ void computeShapes(vector<ShapeTwoD*> &v){
     cout << "Computation Completed! ( " <<  v.size() << " records were updated )" << endl;
 }
 
+void sortShapesData(vector<ShapeTwoD> &v ){
+
+    cout << endl;
+    cout << "\ta)\tSort by area (ascending)" << endl;
+    cout << "\tb)\tSort by area (descending)" << endl;
+    cout << "\tc)\tSort by special type and area" << endl;
+
+    cout << endl;
+
+    while(true){
+        cout << "Please select sort option ('q' to go back to main menu) : ";
+        char choice;
+        if(choice == 'q'){
+            break;
+        }else if(choice == 'a'){
+
+        }else if(choice == 'b'){
+
+        }else if(choice == 'c'){
+
+        }else{
+            cout << endl << "Choice is invalid please try again" << endl;
+        }
+    }
+
+
+
+}
 
 int main() {
     vector<ShapeTwoD* > allShapes;
