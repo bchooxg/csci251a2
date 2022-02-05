@@ -825,10 +825,20 @@ int getShapeInput(vector<ShapeTwoD*> &v, int &shapesCount){
 
     cout << "Please enter name of shape : ";
     cin >> shapeType;
+
     cout << "Please enter special type : ";
     cin >> specialType;
 
-    bool containsWarpSpace = specialType == "WS";
+    bool containsWarpSpace ;
+
+    if(specialType == "WS"){
+        containsWarpSpace = true;
+    }else if(specialType == "NS") {
+        containsWarpSpace = false;
+    }else{
+        cout << "Invalid special type. Please enter [WS/NS]" << endl;
+        return 1;
+    }
 
     if(shapeType == "Circle"){
         Circle * c = new Circle(shapeType, containsWarpSpace, shapesCount++);
@@ -952,7 +962,13 @@ int sortShapes(const string sortType, vector<ShapeTwoD*> &allShapes){
     return 0;
 }
 
-void sortShapesData(vector<ShapeTwoD * > &v ){
+int sortShapesData(vector<ShapeTwoD * > &v ){
+
+    if(v.size() < 2){
+        cout << endl;
+        cout << "Please add at least 2 shapes before attempting to sort" << endl;
+        return 1;
+    }
 
     cout << endl;
     cout << "\ta)\tSort by area (ascending)" << endl;
@@ -964,6 +980,9 @@ void sortShapesData(vector<ShapeTwoD * > &v ){
     while(true){
         cout << "Please select sort option ('q' to go back to main menu) : ";
         char choice;
+
+        cin >> choice;
+
         if(choice == 'q'){
             break;
         }else if(choice == 'a'){
@@ -980,8 +999,7 @@ void sortShapesData(vector<ShapeTwoD * > &v ){
         }
     }
     cout << endl << endl << "All shapes displayed. Going back to main menu ... " << endl;
-
-
+    return 0;
 }
 
 
