@@ -146,7 +146,7 @@ public:
 
     string toString() override {
         stringstream ss;
-        string temp = "";
+        ss << endl;
         ss << "Shape [" << to_string(id) << "]" << endl;
         ss << "Name   : " << name << endl;
         ss << "Special Type : " << (containsWarpSpace ? "WS" : "NS") << endl;
@@ -395,7 +395,7 @@ public:
 
     string toString() override {
         stringstream ss;
-        string temp = "";
+        ss << endl;
         ss << "Shape [" << to_string(id) << "]" << endl;
         ss << "Name   : " << name << endl;
         ss << "Special Type : " << (containsWarpSpace ? "WS" : "NS") << endl;
@@ -550,7 +550,7 @@ public:
 
     string toString() override {
         stringstream ss;
-        string temp = "";
+        ss << endl;
         ss << "Shape [" << to_string(id) << "]" << endl;
         ss << "Name   : " << name << endl;
         ss << "Special Type : " << (containsWarpSpace ? "WS" : "NS") << endl;
@@ -704,7 +704,7 @@ public:
 
     string toString() override {
         stringstream ss;
-        string temp = "";
+        ss << endl;
         ss << "Shape [" << to_string(id) << "]" << endl;
         ss << "Name   : " << name << endl;
         ss << "Special Type : " << (containsWarpSpace ? "WS" : "NS") << endl;
@@ -873,12 +873,17 @@ void printShapesReport(vector<ShapeTwoD*> &v){
 
     cout << "Total no. of records available : " << v.size() << endl;
 
+    double sum=0;
     for(int i = 0; i < v.size(); i++){
-        cout << endl;
         cout << v.at(i)->toString();
+        sum += v.at(i) ->getArea();
     }
 
-    cout << endl << endl << "All shapes displayed. Going back to main menu ... " << endl;
+    // Additional Feature
+    cout << endl << "Average size of shapes : " << sum/v.size() << " units square" << endl;
+
+
+    cout << endl << "All shapes displayed. Going back to main menu ... " << endl;
 
 
 
