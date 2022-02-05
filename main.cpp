@@ -23,9 +23,10 @@ public:
         return name;
     }
 
-    bool isContainsWarpSpace() const {
+    bool getContainsWarpSpace(){
         return containsWarpSpace;
     }
+
 
     // Setter Methods
     void setName(string name) {
@@ -40,6 +41,7 @@ public:
     virtual double computeArea()=0;
     virtual bool isPointInShape(int x, int y)=0;
     virtual bool isPointOnShape(int x, int y)=0;
+    virtual double getArea() = 0;
 
 
 };
@@ -64,6 +66,29 @@ private:
     int yMin;
     int yMax;
 
+    // Private Functions
+
+    int pnpoly(int nvert, int *vertx, int *verty, int testx, int testy){
+        // Helper function using ray tracing algorithm to find if the point lies within a polygon
+        // c value switches between 1 and 0 based on how many times it crosses a vertice
+        // If it is 1 it means that it is within the shape
+        int i, j, c = 0;
+        for (i = 0, j = nvert-1; i < nvert; j = i++) {
+            if ( ((verty[i]>testy) != (verty[j]>testy)) &&
+                 (testx < (vertx[j]-vertx[i]) * (testy-verty[i]) / (verty[j]-verty[i]) + vertx[i]) )
+                c = !c;
+        }
+        return c;
+    }
+
+    bool isPointAVertex(int x , int y){
+        for(int i = 0; i < CROSSVERTICES; i++){
+            if(x == xVertices[i] && y == yVertices[i]){
+                return true;
+            }
+        }
+        return false;
+    }
 public:
     Cross(string name, bool containsWarpSpace, int id) : ShapeTwoD(name, containsWarpSpace) {
         this->id = id;
@@ -177,28 +202,6 @@ public:
         return area;
     }
 
-private: int pnpoly(int nvert, int *vertx, int *verty, int testx, int testy){
-        // Helper function using ray tracing algorithm to find if the point lies within a polygon
-        // c value switches between 1 and 0 based on how many times it crosses a vertice
-        // If it is 1 it means that it is within the shape
-        int i, j, c = 0;
-        for (i = 0, j = nvert-1; i < nvert; j = i++) {
-            if ( ((verty[i]>testy) != (verty[j]>testy)) &&
-                 (testx < (vertx[j]-vertx[i]) * (testy-verty[i]) / (verty[j]-verty[i]) + vertx[i]) )
-                c = !c;
-        }
-        return c;
-    }
-
-    bool isPointAVertex(int x , int y){
-        for(int i = 0; i < CROSSVERTICES; i++){
-            if(x == xVertices[i] && y == yVertices[i]){
-                return true;
-            }
-        }
-        return false;
-    }
-
     bool isPointInShape(int x, int y) override {
 
         int result = pnpoly(CROSSVERTICES, xVertices, yVertices, x, y);
@@ -275,6 +278,10 @@ private: int pnpoly(int nvert, int *vertx, int *verty, int testx, int testy){
             }
         }
         return false;
+    }
+
+    double getArea() override{
+        return area;
     }
 
 };
@@ -437,6 +444,10 @@ public:
         return area;
     }
 
+    double getArea() override{
+        return area;
+    }
+
 };
 
 class Circle : public ShapeTwoD{
@@ -576,6 +587,10 @@ public:
         ss << endl;
 
         return ss.str();
+    }
+
+    double getArea() override{
+        return area;
     }
 
 };
@@ -736,6 +751,10 @@ public:
         return area;
     }
 
+    double getArea() override{
+        return area;
+    }
+
 };
 
 int displayMenu(){
@@ -863,7 +882,77 @@ void computeShapes(vector<ShapeTwoD*> &v){
     cout << "Computation Completed! ( " <<  v.size() << " records were updated )" << endl;
 }
 
-void sortShapesData(vector<ShapeTwoD> &v ){
+int sortShapes(const string sortType, vector<ShapeTwoD*> &allShapes){
+
+    // Special handling for special sort that will exit function early
+
+    if(sortType == "Special"){
+
+        // Initialize separate vectors for Warp Space and normal space
+        vector<ShapeTwoD * > tempWSVec;
+        vector<ShapeTwoD * > tempNSVec;
+
+        // Populates the WS and NS vectors above
+        for(int i = 0; i < allShapes.size(); i ++){
+            if(allShapes.at(i)->getContainsWarpSpace()){
+                tempWSVec.push_back(allShapes.at(i));
+            }else{
+                tempNSVec.push_back(allShapes.at(i));
+            }
+        }
+
+        // Sort the both vectors in desc order
+        sort(tempWSVec.begin(), tempWSVec.end(),
+             [](ShapeTwoD * shape1 , ShapeTwoD * shape2){
+                 return shape1->getArea() < shape2->getArea();
+             });
+
+        sort(tempNSVec.begin(), tempNSVec.end(),
+             [](ShapeTwoD * shape1 , ShapeTwoD * shape2){
+                 return shape1->getArea() < shape2->getArea();
+             });
+
+        // Prints warp space vectors first followed by normal space
+        for(int i = 0; i < tempWSVec.size(); i++){
+            cout << tempWSVec.at(i)->toString();
+        }
+        for(int i = 0; i < tempNSVec.size(); i++){
+            cout << tempNSVec.at(i)->toString();
+        }
+        return 0;
+    }
+
+    // Initialize temp vector that will be rearranged according to the sort
+    vector<ShapeTwoD * > tempVec;
+
+    // Populates the temporary vector
+    for(int i = 0; i < allShapes.size(); i++){
+        tempVec.push_back(allShapes.at(i));
+    }
+
+    if(sortType == "ASC"){
+        // Sorts temp vec in ascending order
+        sort(tempVec.begin(), tempVec.end(),
+             [](ShapeTwoD * shape1 , ShapeTwoD * shape2){
+                 return shape1->getArea() > shape2->getArea();
+             });
+
+    }else if(sortType == "DSC"){
+        // Sorts temp vec in descending order
+        sort(tempVec.begin(), tempVec.end(),
+             [](ShapeTwoD * shape1 , ShapeTwoD * shape2){
+                 return shape1->getArea() < shape2->getArea();
+             });
+    }
+
+    // Prints out temp vec
+    for(int i = 0; i < tempVec.size(); i ++){
+        cout << tempVec.at(i)->toString();
+    }
+    return 0;
+}
+
+void sortShapesData(vector<ShapeTwoD * > &v ){
 
     cout << endl;
     cout << "\ta)\tSort by area (ascending)" << endl;
@@ -878,19 +967,24 @@ void sortShapesData(vector<ShapeTwoD> &v ){
         if(choice == 'q'){
             break;
         }else if(choice == 'a'){
-
+            sortShapes("ASC", v);
+            break;
         }else if(choice == 'b'){
-
+            sortShapes("DSC", v);
+            break;
         }else if(choice == 'c'){
-
+            sortShapes("SPECIAL", v);
+            break;
         }else{
             cout << endl << "Choice is invalid please try again" << endl;
         }
     }
-
+    cout << endl << endl << "All shapes displayed. Going back to main menu ... " << endl;
 
 
 }
+
+
 
 int main() {
     vector<ShapeTwoD* > allShapes;
@@ -910,13 +1004,11 @@ int main() {
                 printShapesReport(allShapes);
                 break;
             case 4:
+                sortShapesData(allShapes);
                 break;
         }
     }
 
-//    Rectangle r = Rectangle("Rectangle", false);
-//    cout << r.toString();
-//    allShapes.push_back(&r);
 
     return 0;
 }
