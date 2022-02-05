@@ -1,4 +1,5 @@
 #include <iostream>
+#include <algorithm>
 #include <iomanip>
 #include <vector>
 #include <sstream>
@@ -485,11 +486,11 @@ public:
             int y_ord;
 
             // TODO add exception handling for non int values inserted
-            cout << "\nPlease enter x-ordinate of center : ";
+            cout << "Please enter x-ordinate of center : ";
             cin >> x_ord ;
-            cout << "\nPlease enter y-ordinate of center : ";
+            cout << "Please enter y-ordinate of center : ";
             cin >> y_ord;
-            cout << "Please enter radius (units) :" << endl;
+            cout << "Please enter radius (units) : " ;
             cin >> radius;
 
             this->xVertices[i] = x_ord;
@@ -816,7 +817,7 @@ int displayMenu(){
 }
 
 int getShapeInput(vector<ShapeTwoD*> &v, int &shapesCount){
-    cout << endl;
+
     cout << "[ Input sensor data ]" << endl;
 
     string shapeType;
@@ -828,6 +829,7 @@ int getShapeInput(vector<ShapeTwoD*> &v, int &shapesCount){
 
     cout << "Please enter special type : ";
     cin >> specialType;
+    cout << endl;
 
     bool containsWarpSpace ;
 
@@ -979,7 +981,6 @@ int sortShapesData(vector<ShapeTwoD * > &v, int & computedShapes ){
         return 1;
     }
 
-    cout << endl;
     cout << "\ta)\tSort by area (ascending)" << endl;
     cout << "\tb)\tSort by area (descending)" << endl;
     cout << "\tc)\tSort by special type and area" << endl;
@@ -1007,7 +1008,7 @@ int sortShapesData(vector<ShapeTwoD * > &v, int & computedShapes ){
             cout << endl << "Choice is invalid please try again" << endl;
         }
     }
-    cout << endl << endl << "All shapes displayed. Going back to main menu ... " << endl;
+    cout << endl << endl << "Going back to main menu ... " << endl;
     return 0;
 }
 
