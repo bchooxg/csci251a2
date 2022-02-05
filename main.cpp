@@ -884,11 +884,11 @@ void printShapesReport(vector<ShapeTwoD*> &v){
 
 }
 
-void computeShapes(vector<ShapeTwoD*> &v){
+void computeShapes(vector<ShapeTwoD*> &v, int & computedShapes){
     for(int i = 0; i < v.size(); i++){
         v.at(i)->computeArea();
     }
-
+    computedShapes = v.size();
     cout << "Computation Completed! ( " <<  v.size() << " records were updated )" << endl;
 }
 
@@ -914,12 +914,12 @@ int sortShapes(const string sortType, vector<ShapeTwoD*> &allShapes){
         // Sort the both vectors in desc order
         sort(tempWSVec.begin(), tempWSVec.end(),
              [](ShapeTwoD * shape1 , ShapeTwoD * shape2){
-                 return shape1->getArea() < shape2->getArea();
+                 return shape1->getArea() > shape2->getArea();
              });
 
         sort(tempNSVec.begin(), tempNSVec.end(),
              [](ShapeTwoD * shape1 , ShapeTwoD * shape2){
-                 return shape1->getArea() < shape2->getArea();
+                 return shape1->getArea()  > shape2->getArea();
              });
 
         // Prints warp space vectors first followed by normal space
@@ -944,14 +944,14 @@ int sortShapes(const string sortType, vector<ShapeTwoD*> &allShapes){
         // Sorts temp vec in ascending order
         sort(tempVec.begin(), tempVec.end(),
              [](ShapeTwoD * shape1 , ShapeTwoD * shape2){
-                 return shape1->getArea() > shape2->getArea();
+                 return shape1->getArea() < shape2->getArea();
              });
 
     }else if(sortType == "DSC"){
         // Sorts temp vec in descending order
         sort(tempVec.begin(), tempVec.end(),
              [](ShapeTwoD * shape1 , ShapeTwoD * shape2){
-                 return shape1->getArea() < shape2->getArea();
+                 return shape1->getArea() > shape2->getArea();
              });
     }
 
@@ -962,11 +962,15 @@ int sortShapes(const string sortType, vector<ShapeTwoD*> &allShapes){
     return 0;
 }
 
-int sortShapesData(vector<ShapeTwoD * > &v ){
+int sortShapesData(vector<ShapeTwoD * > &v, int & computedShapes ){
 
     if(v.size() < 2){
         cout << endl;
         cout << "Please add at least 2 shapes before attempting to sort" << endl;
+        return 1;
+    }
+    if(computedShapes != v.size()){
+        cout << "Please compute the areas of all shapes before performing sort operations" << endl;
         return 1;
     }
 
@@ -1008,6 +1012,7 @@ int main() {
     vector<ShapeTwoD* > allShapes;
     bool running = true;
     int shapesCount = 0;
+    int computedShapes = 0;
 
     while(running){
         int choice = displayMenu();
@@ -1016,13 +1021,13 @@ int main() {
                 getShapeInput(allShapes, shapesCount);
                 break;
             case 2:
-                computeShapes(allShapes);
+                computeShapes(allShapes, computedShapes);
                 break;
             case 3:
                 printShapesReport(allShapes);
                 break;
             case 4:
-                sortShapesData(allShapes);
+                sortShapesData(allShapes, computedShapes);
                 break;
         }
     }
