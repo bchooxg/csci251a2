@@ -23,7 +23,7 @@ public:
         return name;
     }
 
-    bool getContainsWarpSpace(){
+    bool getContainsWarpSpace() const{
         return containsWarpSpace;
     }
 
@@ -70,7 +70,7 @@ private:
 
     int pnpoly(int nvert, int *vertx, int *verty, int testx, int testy){
         // Helper function using ray tracing algorithm to find if the point lies within a polygon
-        // c value switches between 1 and 0 based on how many times it crosses a vertice
+        // c value switches between 1 and 0 based on how many times it crosses a line
         // If it is 1 it means that it is within the shape
         int i, j, c = 0;
         for (i = 0, j = nvert-1; i < nvert; j = i++) {
@@ -151,7 +151,7 @@ public:
         ss << "Name   : " << name << endl;
         ss << "Special Type : " << (containsWarpSpace ? "WS" : "NS") << endl;
         if(area > 0){
-            ss << "Area : " << area << " units sqaure" << endl;
+            ss << "Area : " << area << " units square" << endl;
         }else{
             ss << "Area : " <<  "Not Computed yet" << endl;
         }        ss << "Vertices : "<< endl;
@@ -400,7 +400,7 @@ public:
         ss << "Name   : " << name << endl;
         ss << "Special Type : " << (containsWarpSpace ? "WS" : "NS") << endl;
         if(area > 0){
-            ss << "Area : " << area << " units sqaure" << endl;
+            ss << "Area : " << area << " units square" << endl;
         }else{
             ss << "Area : " <<  "Not Computed yet" << endl;
         }
@@ -411,7 +411,7 @@ public:
         }
 
         ss << "Points on perimeter : ";
-        if(xPerimeterPoints.size() == 0){ ss << "none!";}
+        if(xPerimeterPoints.empty()){ ss << "none!";}
         for(int i = 0; i < xPerimeterPoints.size(); i++){
             if(i != 0){
                 ss << ", ";
@@ -420,7 +420,7 @@ public:
         }
 
         ss << endl << "Points within shape : ";
-        if(xShapePoints.size() == 0){ ss << "none!";}
+        if(xShapePoints.empty()){ ss << "none!";}
         for(int i = 0; i < xShapePoints.size(); i++){
             if(i != 0){
                 ss << ", ";
@@ -555,7 +555,7 @@ public:
         ss << "Name   : " << name << endl;
         ss << "Special Type : " << (containsWarpSpace ? "WS" : "NS") << endl;
         if(area > 0){
-            ss << "Area : " << area << " units sqaure" << endl;
+            ss << "Area : " << area << " units square" << endl;
         }else{
             ss << "Area : " <<  "Not Computed yet" << endl;
         }
@@ -709,7 +709,7 @@ public:
         ss << "Name   : " << name << endl;
         ss << "Special Type : " << (containsWarpSpace ? "WS" : "NS") << endl;
         if(area > 0){
-            ss << "Area : " << area << " units sqaure" << endl;
+            ss << "Area : " << area << " units square" << endl;
         }else{
             ss << "Area : " <<  "Not Computed yet" << endl;
         }
@@ -897,7 +897,7 @@ void computeShapes(vector<ShapeTwoD*> &v, int & computedShapes){
     cout << "Computation Completed! ( " <<  v.size() << " records were updated )" << endl;
 }
 
-int sortShapes(const string sortType, vector<ShapeTwoD*> &allShapes){
+int sortShapes(const string& sortType, vector<ShapeTwoD*> &allShapes){
 
     // Special handling for special sort that will exit function early
 
@@ -1034,9 +1034,9 @@ int main() {
             case 4:
                 sortShapesData(allShapes, computedShapes);
                 break;
+            default:
+                cout << endl << "Invalid choice. Please enter a num [1-4]" << endl;
+                break;
         }
     }
-
-
-    return 0;
 }
