@@ -896,7 +896,7 @@ int sortShapes(const string sortType, vector<ShapeTwoD*> &allShapes){
 
     // Special handling for special sort that will exit function early
 
-    if(sortType == "Special"){
+    if(sortType == "SPECIAL"){
 
         // Initialize separate vectors for Warp Space and normal space
         vector<ShapeTwoD * > tempWSVec;
