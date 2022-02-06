@@ -1,0 +1,3 @@
+g++ -std=c++11 main.cpp ShapeTwoD.cpp Rectangle.cpp Square.cpp Circle.cpp Cross.cpp -o main.exe
+
+// Command to compile the code
