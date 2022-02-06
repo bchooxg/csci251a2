@@ -34,8 +34,14 @@ private:
     int yMax;
 
 public:
+
+    // Public Constructor
     Rectangle(string name, bool containsWarpSpace, int id);
+
+    // Class method
     void storeVertices();
+
+    // Overriden methods
     bool isPointInShape(int x, int y) override;
     bool isPointOnShape(int x, int y) override;
     string toString() override;

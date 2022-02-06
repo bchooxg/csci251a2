@@ -73,6 +73,8 @@ int displayMenu(){
 
 int getShapeInput(vector<ShapeTwoD*> &v, int &shapesCount){
 
+    // Gets input from user
+
     cout << "[ Input sensor data ]" << endl;
 
     string shapeType;
@@ -88,6 +90,7 @@ int getShapeInput(vector<ShapeTwoD*> &v, int &shapesCount){
 
     bool containsWarpSpace ;
 
+    // Checks for valid warp space text
     if(specialType == "WS"){
         containsWarpSpace = true;
     }else if(specialType == "NS") {
@@ -97,6 +100,7 @@ int getShapeInput(vector<ShapeTwoD*> &v, int &shapesCount){
         return 1;
     }
 
+    // Checks the shape that user has entered and calls the relevant constructor
     if(shapeType == "Circle"){
         Circle * c = new Circle(shapeType, containsWarpSpace, shapesCount++);
         c->storeVertices();
@@ -120,6 +124,7 @@ int getShapeInput(vector<ShapeTwoD*> &v, int &shapesCount){
         return 1;
     }
 
+    // Adds the shape to the vector
     v.push_back(temp);
     cout << endl << "Record successfully stored. Going back to main menu ..." << endl;
     return 0;
@@ -137,7 +142,9 @@ void printShapesReport(vector<ShapeTwoD*> &v){
     }
 
     // Additional Feature
-    cout << endl << "Average size of shapes : " << sum/v.size() << " units square" << endl;
+    if(v.size() > 2){
+        cout << endl << "Average size of shapes : " << sum/v.size() << " units square" << endl;
+    }
 
 
     cout << endl << "All shapes displayed. Going back to main menu ... " << endl;
@@ -147,9 +154,13 @@ void printShapesReport(vector<ShapeTwoD*> &v){
 }
 
 void computeShapes(vector<ShapeTwoD*> &v, int & computedShapes){
+    // Loops through all shapes
+
     for(int i = 0; i < v.size(); i++){
         v.at(i)->computeArea();
     }
+
+    // Updates external variable
     computedShapes = v.size();
     cout << "Computation Completed! ( " <<  v.size() << " records were updated )" << endl;
 }
@@ -226,6 +237,8 @@ int sortShapes(const string& sortType, vector<ShapeTwoD*> &allShapes){
 
 int sortShapesData(vector<ShapeTwoD * > &v, int & computedShapes ){
 
+    // Check the size of the vector to make sure there is enough shapes to sort
+
     if(v.size() < 2){
         cout << endl;
         cout << "Please add at least 2 shapes before attempting to sort" << endl;
@@ -243,6 +256,8 @@ int sortShapesData(vector<ShapeTwoD * > &v, int & computedShapes ){
     cout << endl;
 
     while(true){
+
+        // Prompt for user input
         cout << "Please select sort option ('q' to go back to main menu) : ";
         char choice;
 

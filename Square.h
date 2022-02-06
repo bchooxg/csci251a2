@@ -35,8 +35,13 @@ private:
 
 public:
 
+    // Public Constructor
     Square(string name, bool containsWarpSpace, int id);
+
+    // Class methods
     void storeVertices();
+
+    // Overridden methods
     bool isPointInShape(int x, int y) override;
     bool isPointOnShape(int x, int y) override;
     string toString() override;

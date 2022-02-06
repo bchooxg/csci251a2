@@ -62,11 +62,15 @@ void Circle::storeVertices(){
 bool Circle::isPointInShape(int x, int y) {
     // Uses pythagoras theorem to find distance from the center
     // a^2  + b^2 = c^2
+    // If c < radius , point is in shape
     double result = sqrt( pow((x - xVertices[0]),2.0) + pow((y - yVertices[0]),2.0 ) )  ;
     return result < radius;
 }
 
 bool Circle::isPointOnShape(int x, int y)  {
+    // Uses pythagoras theorem to find distance from the center
+    // a^2  + b^2 = c^2
+    // If c = radius , point is on shape
     double result = sqrt( pow((x - xVertices[0]),2.0) + pow((y - yVertices[0]),2.0 ) )  ;
     return result == radius;
 }

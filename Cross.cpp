@@ -19,6 +19,7 @@ int Cross::pnpoly(int nvert, int *vertx, int *verty, int testx, int testy) {
 }
 
 bool Cross::isPointAVertex(int x , int y){
+    // Loops through all vertices and checks if a given point is a vertex
     for(int i = 0; i < CROSSVERTICES; i++){
         if(x == xVertices[i] && y == yVertices[i]){
             return true;
@@ -141,6 +142,8 @@ double Cross::computeArea() {
 }
 
 bool Cross::isPointInShape(int x, int y) {
+    // If the result = 1 , it means that the point is in the shape since it only passes an edge once
+
     int result = pnpoly(CROSSVERTICES, xVertices, yVertices, x, y);
 
     if(result == 1){

@@ -35,8 +35,13 @@ private:
 
 
 public:
+    // Public Constructor
     Circle(string name, bool containsWarpSpace, int id);
+
+    // Class methods
     void storeVertices();
+
+    // Overriden methods
     bool isPointInShape(int x, int y) override;
     bool isPointOnShape(int x, int y) override;
     double computeArea() override;

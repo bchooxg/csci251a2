@@ -30,13 +30,19 @@ private:
     int yMin;
     int yMax;
 
-    // Private Functions
+    // Private Class method
     int pnpoly(int nvert, int *vertx, int *verty, int testx, int testy);
     bool isPointAVertex(int x , int y);
 
 public:
+
+    // Public constructor
     Cross(string name, bool containsWarpSpace, int id);
+
+    // Public Class method
     void storeVertices();
+
+    // Overriden methods
     string toString() override;
     double computeArea() override;
     bool isPointInShape(int x, int y) override;
