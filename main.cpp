@@ -166,7 +166,12 @@ void computeShapes(vector<ShapeTwoD*> &v, int & computedShapes){
 
     // Updates external variable
     computedShapes = v.size();
-    cout << "Computation Completed! ( " <<  updatedShapes << " records were updated )" << endl;
+
+    if(updatedShapes == 0){
+        cout << "All shape areas are already computed! [" << computedShapes << " shapes]"<<  endl;
+    }else{
+        cout << "Computation Completed! ( " <<  updatedShapes << " records were updated )" << endl;
+    }
 }
 
 int sortShapes(const string& sortType, vector<ShapeTwoD*> &allShapes){
