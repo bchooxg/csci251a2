@@ -155,14 +155,18 @@ void printShapesReport(vector<ShapeTwoD*> &v){
 
 void computeShapes(vector<ShapeTwoD*> &v, int & computedShapes){
     // Loops through all shapes
+    int updatedShapes = 0;
 
     for(int i = 0; i < v.size(); i++){
-        v.at(i)->computeArea();
+        if(v.at(i)->getArea() == 0){
+            v.at(i)->computeArea();
+            updatedShapes++;
+        }
     }
 
     // Updates external variable
     computedShapes = v.size();
-    cout << "Computation Completed! ( " <<  v.size() << " records were updated )" << endl;
+    cout << "Computation Completed! ( " <<  updatedShapes << " records were updated )" << endl;
 }
 
 int sortShapes(const string& sortType, vector<ShapeTwoD*> &allShapes){
