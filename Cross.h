@@ -24,7 +24,7 @@ private:
     vector<int> xShapePoints;
     vector<int> yShapePoints;
 
-    double area;
+    double area = 0;
     int xMin;
     int xMax;
     int yMin;

@@ -26,7 +26,7 @@ private:
 
     double radius;
 
-    double area;
+    double area = 0;
 
     int xMin;
     int yMin;

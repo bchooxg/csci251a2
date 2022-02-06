@@ -35,7 +35,7 @@ int displayMenu(){
 
     cout << "Welcome to Assn2 program!" << endl << endl;
 
-    for(int i = 1; i <= 4; i ++){
+    for(int i = 1; i <= 5; i ++){
         cout << left << setw(optionWidth) << to_string(i) + ")";
         switch (i){
             case 1:
@@ -50,6 +50,8 @@ int displayMenu(){
             case 4:
                 cout << "Sort shapes data";
                 break;
+            case 5:
+                cout << "Exit Program";
         }
         cout << endl;
     }
@@ -59,8 +61,8 @@ int displayMenu(){
     int choice ;
 
     cin >> choice;
-    while( !(choice >= 1 && choice <= 4) ){
-        cout << "Invalid Value, Please select value within 1-4" << endl;
+    while( !(choice >= 1 && choice <= 5) ){
+        cout << "Invalid Value, Please select value within 1-5" << endl;
         cin.clear();
         cin.ignore(100,'\n');
         cin >> choice;
@@ -71,7 +73,7 @@ int displayMenu(){
 
 }
 
-int getShapeInput(vector<ShapeTwoD*> &v, int &shapesCount){
+int getShapeInput(ShapeTwoD* allShapes[], int &shapesCount){
 
     // Gets input from user
 
@@ -102,21 +104,21 @@ int getShapeInput(vector<ShapeTwoD*> &v, int &shapesCount){
 
     // Checks the shape that user has entered and calls the relevant constructor
     if(shapeType == "Circle"){
-        Circle * c = new Circle(shapeType, containsWarpSpace, shapesCount++);
+        Circle * c = new Circle(shapeType, containsWarpSpace, shapesCount);
         c->storeVertices();
         temp = c;
 
     }else if(shapeType == "Square"){
-        Square * s = new Square(shapeType, containsWarpSpace, shapesCount++);
+        Square * s = new Square(shapeType, containsWarpSpace, shapesCount);
         s->storeVertices();
         temp = s;
 
     }else if(shapeType == "Rectangle"){
-        Rectangle * r = new Rectangle(shapeType , containsWarpSpace, shapesCount++);
+        Rectangle * r = new Rectangle(shapeType , containsWarpSpace, shapesCount);
         r->storeVertices();
         temp = r;
     }else if(shapeType == "Cross") {
-        Cross *c = new Cross(shapeType, containsWarpSpace, shapesCount++);
+        Cross *c = new Cross(shapeType, containsWarpSpace, shapesCount);
         c->storeVertices();
         temp = c;
     }else{
@@ -125,25 +127,26 @@ int getShapeInput(vector<ShapeTwoD*> &v, int &shapesCount){
     }
 
     // Adds the shape to the vector
-    v.push_back(temp);
+//    v.push_back(temp);
+    allShapes[shapesCount++] = temp;
     cout << endl << "Record successfully stored. Going back to main menu ..." << endl;
     return 0;
 
 }
 
-void printShapesReport(vector<ShapeTwoD*> &v){
+void printShapesReport(ShapeTwoD* a[], int &shapesCount){
 
-    cout << "Total no. of records available : " << v.size() << endl;
+    cout << "Total no. of records available : " << shapesCount << endl;
 
     double sum=0;
-    for(int i = 0; i < v.size(); i++){
-        cout << v.at(i)->toString();
-        sum += v.at(i) ->getArea();
+    for(int i = 0; i < shapesCount; i++){
+        cout << a[i]->toString();
+        sum += a[i]->getArea();
     }
 
     // Additional Feature
-    if(v.size() > 2){
-        cout << endl << "Average size of shapes : " << sum/v.size() << " units square" << endl;
+    if(shapesCount > 2){
+        cout << endl << "Average size of shapes : " << sum/shapesCount << " units square" << endl;
     }
 
 
@@ -153,19 +156,19 @@ void printShapesReport(vector<ShapeTwoD*> &v){
 
 }
 
-void computeShapes(vector<ShapeTwoD*> &v, int & computedShapes){
+void computeShapes(ShapeTwoD* a[], int shapesCount, int & computedShapes){
     // Loops through all shapes
     int updatedShapes = 0;
 
-    for(int i = 0; i < v.size(); i++){
-        if(v.at(i)->getArea() == 0){
-            v.at(i)->computeArea();
+    for(int i = 0; i < shapesCount; i++){
+        if(a[i]->getArea() == 0){
+            a[i]->computeArea();
             updatedShapes++;
         }
     }
 
     // Updates external variable
-    computedShapes = v.size();
+    computedShapes = shapesCount;
 
     if(updatedShapes == 0){
         cout << "All shape areas are already computed! [" << computedShapes << " shapes]"<<  endl;
@@ -174,7 +177,7 @@ void computeShapes(vector<ShapeTwoD*> &v, int & computedShapes){
     }
 }
 
-int sortShapes(const string& sortType, vector<ShapeTwoD*> &allShapes){
+int sortShapes(const string& sortType, ShapeTwoD* allShapes[], int &shapesCount){
 
     // Special handling for special sort that will exit function early
 
@@ -185,11 +188,11 @@ int sortShapes(const string& sortType, vector<ShapeTwoD*> &allShapes){
         vector<ShapeTwoD * > tempNSVec;
 
         // Populates the WS and NS vectors above
-        for(int i = 0; i < allShapes.size(); i ++){
-            if(allShapes.at(i)->getContainsWarpSpace()){
-                tempWSVec.push_back(allShapes.at(i));
+        for(int i = 0; i < shapesCount; i ++){
+            if(allShapes[i]->getContainsWarpSpace()){
+                tempWSVec.push_back(allShapes[i]);
             }else{
-                tempNSVec.push_back(allShapes.at(i));
+                tempNSVec.push_back(allShapes[i]);
             }
         }
 
@@ -218,8 +221,8 @@ int sortShapes(const string& sortType, vector<ShapeTwoD*> &allShapes){
     vector<ShapeTwoD * > tempVec;
 
     // Populates the temporary vector
-    for(int i = 0; i < allShapes.size(); i++){
-        tempVec.push_back(allShapes.at(i));
+    for(int i = 0; i < shapesCount; i++){
+        tempVec.push_back(allShapes[i]);
     }
 
     if(sortType == "ASC"){
@@ -244,16 +247,16 @@ int sortShapes(const string& sortType, vector<ShapeTwoD*> &allShapes){
     return 0;
 }
 
-int sortShapesData(vector<ShapeTwoD * > &v, int & computedShapes ){
+int sortShapesData(ShapeTwoD* a[], int &shapesCount, int & computedShapes ){
 
     // Check the size of the vector to make sure there is enough shapes to sort
 
-    if(v.size() < 2){
+    if(shapesCount < 2){
         cout << endl;
         cout << "Please add at least 2 shapes before attempting to sort" << endl;
         return 1;
     }
-    if(computedShapes != v.size()){
+    if(computedShapes != shapesCount){
         cout << "Please compute the areas of all shapes before performing sort operations" << endl;
         return 1;
     }
@@ -275,13 +278,13 @@ int sortShapesData(vector<ShapeTwoD * > &v, int & computedShapes ){
         if(choice == 'q'){
             break;
         }else if(choice == 'a'){
-            sortShapes("ASC", v);
+            sortShapes("ASC", a, shapesCount);
             break;
         }else if(choice == 'b'){
-            sortShapes("DSC", v);
+            sortShapes("DSC", a , shapesCount);
             break;
         }else if(choice == 'c'){
-            sortShapes("SPECIAL", v);
+            sortShapes("SPECIAL", a, shapesCount);
             break;
         }else{
             cout << endl << "Choice is invalid please try again" << endl << endl;
@@ -295,6 +298,8 @@ int sortShapesData(vector<ShapeTwoD * > &v, int & computedShapes ){
 
 int main() {
     vector<ShapeTwoD* > allShapes;
+    ShapeTwoD *shapeArr[100];
+
     bool running = true;
     int shapesCount = 0;
     int computedShapes = 0;
@@ -303,19 +308,27 @@ int main() {
         int choice = displayMenu();
         switch (choice) {
             case 1:
-                getShapeInput(allShapes, shapesCount);
+                getShapeInput(shapeArr, shapesCount);
                 break;
             case 2:
-                computeShapes(allShapes, computedShapes);
+                computeShapes(shapeArr, shapesCount, computedShapes);
                 break;
             case 3:
-                printShapesReport(allShapes);
+                printShapesReport(shapeArr, shapesCount);
                 break;
             case 4:
-                sortShapesData(allShapes, computedShapes);
+                sortShapesData(shapeArr,shapesCount, computedShapes);
+                break;
+            case 5:
+                for (auto v : allShapes)
+                {
+                    delete v;
+                }
+                cout << "Exiting Program ... ";
+                running = false;
                 break;
             default:
-                cout << endl << "Invalid choice. Please enter a num [1-4]" << endl;
+                cout << endl << "Invalid choice. Please enter a num [1-5]" << endl;
                 break;
         }
     }

@@ -26,7 +26,7 @@ private:
     int height ;
     int width ;
 
-    double area;
+    double area = 0;
 
     int xMin;
     int yMin;
