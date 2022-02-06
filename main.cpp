@@ -275,7 +275,7 @@ int sortShapesData(vector<ShapeTwoD * > &v, int & computedShapes ){
             sortShapes("SPECIAL", v);
             break;
         }else{
-            cout << endl << "Choice is invalid please try again" << endl;
+            cout << endl << "Choice is invalid please try again" << endl << endl;
         }
     }
     cout << endl << endl << "Going back to main menu ... " << endl;
