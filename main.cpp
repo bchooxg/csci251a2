@@ -140,13 +140,14 @@ void printShapesReport(ShapeTwoD* a[], int &shapesCount){
 
     double sum=0;
     for(int i = 0; i < shapesCount; i++){
+        cout << endl;
         cout << a[i]->toString();
         sum += a[i]->getArea();
     }
 
     // Additional Feature
-    if(shapesCount > 2){
-        cout << endl << "Average size of shapes : " << sum/shapesCount << " units square" << endl;
+    if(shapesCount > 2 && sum > 0){
+        cout << endl << endl << "Average size of shapes : " << sum/shapesCount << " units square" << endl;
     }
 
 
