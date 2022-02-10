@@ -4,6 +4,8 @@
 
 #include <sstream>
 #include "Cross.h"
+#include <iostream>
+#include <iomanip>
 
 int Cross::pnpoly(int nvert, int *vertx, int *verty, int testx, int testy) {
     // Helper function using ray tracing algorithm to find if the point lies within a polygon
@@ -90,7 +92,7 @@ string Cross::toString() {
     ss << "Special Type : " << (containsWarpSpace ? "WS" : "NS") << endl;
 
     if(area > 0){
-        ss << "Area : " << area << " units square" << endl;
+        ss << "Area : " << fixed << setprecision(2) << area << " units square" << endl;
     }else{
         ss << "Area : " <<  "Not Computed yet" << endl;
     }        ss << "Vertices : "<< endl;

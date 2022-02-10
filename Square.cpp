@@ -4,6 +4,8 @@
 
 #include "Square.h"
 #include <sstream>
+#include <iostream>
+#include <iomanip>
 
 Square::Square(string name, bool containsWarpSpace, int id) : ShapeTwoD(name, containsWarpSpace) {
     this-> id = id;
@@ -93,7 +95,7 @@ string Square::toString() {
     ss << "Name   : " << name << endl;
     ss << "Special Type : " << (containsWarpSpace ? "WS" : "NS") << endl;
     if(area > 0){
-        ss << "Area : " << area << " units square" << endl;
+        ss << "Area : " << fixed << setprecision(2) << area << " units square" << endl;
     }else{
         ss << "Area : " <<  "Not Computed yet" << endl;
     }

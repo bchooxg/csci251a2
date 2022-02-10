@@ -4,7 +4,8 @@
 
 #include "Rectangle.h"
 #include <sstream>
-
+#include <iostream>
+#include <iomanip>
 
 
 Rectangle::Rectangle(string name, bool containsWarpSpace, int id) : ShapeTwoD(name, containsWarpSpace) {
@@ -96,7 +97,7 @@ string Rectangle::toString()  {
     ss << "Name   : " << name << endl;
     ss << "Special Type : " << (containsWarpSpace ? "WS" : "NS") << endl;
     if(area > 0){
-        ss << "Area : " << area << " units square" << endl;
+        ss << "Area : " << fixed << setprecision(2) << area << " units square" << endl;
     }else{
         ss << "Area : " <<  "Not Computed yet" << endl;
     }
