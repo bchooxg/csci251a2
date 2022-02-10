@@ -210,10 +210,10 @@ int sortShapes(const string& sortType, ShapeTwoD* allShapes[], int &shapesCount)
 
         // Prints warp space vectors first followed by normal space
         for(int i = 0; i < tempWSVec.size(); i++){
-            cout << tempWSVec.at(i)->toString();
+            cout << endl << tempWSVec.at(i)->toString();
         }
         for(int i = 0; i < tempNSVec.size(); i++){
-            cout << tempNSVec.at(i)->toString();
+            cout << endl << tempNSVec.at(i)->toString();
         }
         return 0;
     }
@@ -243,7 +243,7 @@ int sortShapes(const string& sortType, ShapeTwoD* allShapes[], int &shapesCount)
 
     // Prints out temp vec
     for(int i = 0; i < tempVec.size(); i ++){
-        cout << tempVec.at(i)->toString();
+        cout << endl << tempVec.at(i)->toString();
     }
     return 0;
 }
