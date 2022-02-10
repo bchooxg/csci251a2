@@ -151,7 +151,7 @@ void printShapesReport(ShapeTwoD* a[], int &shapesCount){
     }
 
 
-    cout << endl << "All shapes displayed. Going back to main menu ... " << endl;
+    cout << endl << endl << "All shapes displayed. Going back to main menu ... " << endl;
 
 
 
