@@ -69,8 +69,8 @@ void Cross::storeVertices(){
     }
 
     // Populates perimeter points and shape points
-    for(int i = yMin; i < yMax; i++){
-        for(int j = xMin; j < xMax; j++){
+    for(int i = yMin; i <= yMax; i++){
+        for(int j = xMin; j <= xMax; j++){
             if(isPointAVertex(j,i)){
                 continue;
             }else if(isPointOnShape(j,i)){
@@ -159,10 +159,18 @@ bool Cross::isPointOnShape(int x, int y) {
     // Loop through all vertices
     // Compare if the point lies between the two vertices
 
-    for(int i = 1; i < CROSSVERTICES; i++){
-        // Get the first point
-        int x1 = xVertices[i-1];
-        int y1 = yVertices[i-1];
+    for(int i = 0; i < CROSSVERTICES; i++){
+        // Compares against the last point of the array
+        int x1 = 0;
+        int y1 = 0;
+        if(i == 0 ) {
+            x1 = xVertices[CROSSVERTICES - 1]; // Initialize value to last stored point
+            y1 = yVertices[CROSSVERTICES - 1];  // Initialize value to last stored point
+        }else{
+            // Get the first point
+            x1 = xVertices[i-1];
+            y1 = yVertices[i-1];
+        }
 
         // Get the second point
         int x2 = xVertices[i];
